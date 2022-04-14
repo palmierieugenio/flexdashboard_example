@@ -31,7 +31,11 @@ visNetwork(nodes, edges,
       visGroups(groupname = "president",  color = "red", shape="diamond") %>% 
     visGroups(groupname = "army", color = "green", shape="triangle") %>%
   visGroups(groupname = "oligarch", shape="dot", color = "lightblue") %>% 
-  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE, selectedBy = "group") %>%
+    visGroups(groupname = "resource", shape="database", color = "orange") %>% 
+    visGroups(groupname = "company", shape="ellipse", color = "blue") %>% 
+  visOptions(highlightNearest = list(enabled=TRUE, degree =10^9, hideColor="white"),
+             nodesIdSelection = list(enabled=TRUE, values=nodes$id[nodes$group=="president"]),
+             selectedBy = "group") %>%
   visLegend(main = "Group", position = "right", ncol = 2 )
 ```
 
