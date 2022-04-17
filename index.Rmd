@@ -6,11 +6,14 @@ output:
     vertical_layout: fill
 ---
 
+
 ```{r setup, include=FALSE}
 library(flexdashboard)
 library(visNetwork)
 ```
 
+Ukraine-Russia conflict Network
+===================================== 
 Column {data-width=650}
 -----------------------------------------------------------------------
 
@@ -33,9 +36,38 @@ visNetwork(nodes, edges,
   visGroups(groupname = "oligarch", shape="dot", color = "lightblue") %>% 
     visGroups(groupname = "resource", shape="database", color = "orange") %>% 
     visGroups(groupname = "company", shape="ellipse", color = "blue") %>% 
-  visOptions(highlightNearest = list(enabled=TRUE, degree =10^9, hideColor="white"),
+  visOptions(highlightNearest = list(enabled=TRUE,degree =4 ), # , hideColor="white", degree =10^9
              nodesIdSelection = list(enabled=TRUE, values=nodes$id[nodes$group=="president"]),
              selectedBy = "group") %>%
   visLegend(main = "Group", position = "right", ncol = 2 )
 ```
 
+Doomsday Clock Time Serie
+=====================================     
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+library(readr)
+library(ggplot2)
+library("ggimage")
+doom <- as.data.frame(read_csv("The DoomsDay.csv"))
+posizione_bomba<-50
+
+plotto<-data.frame(Year=c(doom$Year, 2022, 2030),
+                   seconds=c(doom$`Seconds Left`, posizione_bomba, 0), 
+                   image=paste0("C:/Users/eugen/OneDrive/Desktop/russia_ukraina/doomsday/", "bomb.png"))
+plotto$image<-ifelse(plotto$seconds==0,  plotto$image, NA)
+
+# plotto$Year<-factor(plotto$Year, levels = plotto$)
+ggplot(plotto, aes(x=Year,y=seconds)) + 
+    geom_step( color="red")+
+    geom_point(color="red", size=ifelse(plotto$seconds<300, 2, 1))+ 
+    theme(axis.text.x = element_text(angle = ifelse(plotto$seconds==0, 0, 90), vjust = 0.5)) +
+    scale_x_continuous("Year", labels = c(as.character(plotto$Year)[-length(plotto$Year)], "..."), breaks = plotto$Year)+
+    geom_hline(yintercept=0)+
+    geom_image(aes(image=image), size=.07)
+```
